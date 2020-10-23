@@ -1,0 +1,11 @@
+Testing Subway Methods
+... empty subway test passed successfully.
+... adding station test passed successfully.
+... empty subway connections test passed successfully.
+... adding connection test passed successfully.
+
+Testing stations
+... station test passed successfully.
+
+Testing connections...
+...connections test passed successfully.
