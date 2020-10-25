@@ -1,7 +1,10 @@
+import helpers.OutputPrinter;
 import models.Subway;
 import helpers.SubwayLoader;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * The type Load tester tests that the Subway Station file is loaded correctly and contains the right content.
@@ -16,43 +19,60 @@ public class LoadTester
      * @param args the input arguments (should be empty)
      */
     public static void main(String[] args) {
-        testSubwayMethods();
-        testLoadingFile();
+        OutputPrinter writer = null;
+        try {
+            File file = new File("./submission/tests.output.txt");
+            writer = new OutputPrinter(System.out, file);
+            writer.clear();
+
+            testSubwayMethods(writer);
+            testLoadingFile(writer);
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-    private static void testSubwayMethods() {
+    private static void testSubwayMethods(OutputPrinter writer) {
         try {
-            System.out.println("\nTesting Subway Methods");
+            writer.writeln("Testing Subway Methods");
 
             Subway city = new Subway();
             if (!city.hasStation("Test")) {
-                System.out.println("... empty subway test passed successfully.");
+                writer.writeln("... empty subway test passed successfully.");
             } else {
-                System.out.println("... empty subway test FAILED.");
+                writer.writeln("... empty subway test FAILED.");
                 System.exit(-1);
             }
 
             city.addStation("Test");
             if (city.hasStation("Test")) {
-                System.out.println("... adding station test passed successfully.");
+                writer.writeln("... adding station test passed successfully.");
             } else {
-                System.out.println("... adding station test FAILED.");
+                writer.writeln("... adding station test FAILED.");
                 System.exit(-1);
             }
 
             if (!city.hasConnection("Test", "Test2", "Line")) {
-                System.out.println("... empty subway connections test passed successfully.");
+                writer.writeln("... empty subway connections test passed successfully.");
             } else {
-                System.out.println("... empty subway connections test FAILED.");
+                writer.writeln("... empty subway connections test FAILED.");
                 System.exit(-1);
             }
 
             city.addStation("Test2");
             city.addConnection("Test", "Test2", "Line");
             if (city.hasConnection("Test", "Test2", "Line")) {
-                System.out.println("... adding connection test passed successfully.");
+                writer.writeln("... adding connection test passed successfully.");
             } else {
-                System.out.println("... adding connection test FAILED.");
+                writer.writeln("... adding connection test FAILED.");
                 System.exit(-1);
             }
         } catch (Exception e) {
@@ -60,33 +80,33 @@ public class LoadTester
         }
     }
 
-    private static void testLoadingFile() {
+    private static void testLoadingFile(OutputPrinter writer) {
         try {
             SubwayLoader loader = new SubwayLoader();
             String subwayFilePath = "MontrealSubway.txt";
 			Subway city = loader.loadFromFile(new File(subwayFilePath));
 
-            System.out.println("\nTesting stations");
+            writer.writeln("\nTesting stations");
             if (    city.hasStation("Guy Concordia") &&
                     city.hasStation("Snowdon") &&
                     city.hasStation("Berri UQAM")) {
-                System.out.println("... station test passed successfully.");
+                writer.writeln("... station test passed successfully.");
             }
             else
             {
-                System.out.println("...station test FAILED.");
+                writer.writeln("... station test FAILED.");
                 System.exit(-1);
             }
 
-            System.out.println("\nTesting connections...");
+            writer.writeln("\nTesting connections...");
             if (city.hasConnection("Atwater", "Guy Concordia", "Green Line") &&
                 city.hasConnection("Cote Vertu", "Du College", "Orange Line") &&
                 city.hasConnection("Snowdon", "Cote des Neiges", "Blue Line")) {
-                System.out.println("...connections test passed successfully.");
+                writer.writeln("... connections test passed successfully.");
             }
             else
             {
-                System.out.println("...connections test FAILED");
+                writer.writeln("... connections test FAILED.");
                 System.exit(-1);
             }
         } catch (Exception e) {

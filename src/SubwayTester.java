@@ -40,7 +40,9 @@ public class SubwayTester
             }
             
             List route = city.getDirections(start, end);
-            SubwayPrinter printer = new SubwayPrinter(System.out);
+            File file = new File("./submission/output.txt");
+
+            SubwayPrinter printer = new SubwayPrinter(System.out, file);
             printer.printDirections(route);
         }
         catch (Exception e) {
